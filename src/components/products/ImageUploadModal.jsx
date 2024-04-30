@@ -1,12 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const ImageUploadModal = ({ isOpen, onClose }) => {
+const TrainingPlanModal = ({ isOpen, onClose }) => {
   const [values, setValues] = useState({
     name: "",
-    price: "",
-    image: null,
+    exercises: [],
   });
+  const [totalDuration, setTotalDuration] = useState(0);
+
+  // Opciones predefinidas para ejercicios
+  const exercisesOptions = [
+    { name: "Flexiones", durationPerSet: 1, sets: 3, repetitions: 10 },
+    { name: "Sentadillas", durationPerSet: 0.5, sets: 4, repetitions: 15 },
+    { name: "Plancha", durationPerSet: 0.75, sets: 3, repetitions: 30 },
+  ];
+
+  // Calcular la duración total del plan de entrenamiento
+  useEffect(() => {
+    const duration = values.exercises.reduce(
+      (acc, exercise) => acc + exercise.durationPerSet * exercise.sets,
+      0
+    );
+    setTotalDuration(duration);
+  }, [values.exercises]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -16,36 +32,40 @@ const ImageUploadModal = ({ isOpen, onClose }) => {
     }));
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      convertImageToBase64(file);
-    }
+  const handleExerciseChange = (index, e) => {
+    const { name, value } = e.target;
+    setValues((prevValues) => {
+      const exercises = [...prevValues.exercises];
+      exercises[index][name] = value;
+      return { ...prevValues, exercises };
+    });
   };
 
-  const convertImageToBase64 = (file) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setValues((prevValues) => ({
-        ...prevValues,
-        image: reader.result,
-      }));
-    };
+  const handleAddExercise = () => {
+    setValues((prevValues) => ({
+      ...prevValues,
+      exercises: [...prevValues.exercises, { ...exercisesOptions[0] }],
+    }));
   };
-  
 
-  const handleUpload = async () => {
+  const handleRemoveExercise = (index) => {
+    setValues((prevValues) => {
+      const exercises = [...prevValues.exercises];
+      exercises.splice(index, 1);
+      return { ...prevValues, exercises };
+    });
+  };
+
+  const handleCreatePlan = async () => {
     try {
-      if (!values.name || !values.price || !values.image) {
+      if (!values.name || values.exercises.length === 0) {
         console.error("Por favor complete todos los campos.");
         return;
       }
 
-
       const response = await axios.post(
-        "https://nodejs-restapi-mysql-fauno-production.up.railway.app/api/amigurumis",
-        JSON.stringify({ ...values, image: values.image }), // Enviar la URL acortada
+        "https://api.example.com/training-plans",
+        JSON.stringify(values),
         {
           headers: {
             "Content-Type": "application/json",
@@ -54,13 +74,16 @@ const ImageUploadModal = ({ isOpen, onClose }) => {
       );
 
       if (response.status === 200) {
-        console.log("Diseño creado exitosamente");
+        console.log("Plan de entrenamiento creado exitosamente");
         onClose();
       } else {
-        console.error("Error al subir el diseño:", response.statusText);
+        console.error(
+          "Error al crear el plan de entrenamiento:",
+          response.statusText
+        );
       }
     } catch (error) {
-      console.error("Error al subir la imagen:", error);
+      console.error("Error al crear el plan de entrenamiento:", error);
     }
   };
 
@@ -71,41 +94,77 @@ const ImageUploadModal = ({ isOpen, onClose }) => {
       }`}
     >
       <div className="bg-white p-8 rounded-lg shadow-lg w-11/12 max-w-md">
-        <h2 className="text-xl font-bold mb-4">Subir imagen</h2>
+        <h2 className="text-xl font-bold mb-4">Crear Plan de Entrenamiento</h2>
         <div className="mb-4">
           <input
             type="text"
             name="name"
-            placeholder="Nombre"
+            placeholder="Nombre del Plan"
             value={values.name}
             onChange={handleInputChange}
             className="px-4 py-2 border border-gray-300 rounded w-full"
           />
         </div>
         <div className="mb-4">
-          <input
-            type="text"
-            name="price"
-            placeholder="Precio"
-            value={values.price}
-            onChange={handleInputChange}
-            className="px-4 py-2 border border-gray-300 rounded w-full"
-          />
+          <h3 className="text-lg font-semibold mb-2">Ejercicios:</h3>
+          {values.exercises.map((exercise, index) => (
+            <div key={index} className="mb-2">
+              <label className="block font-semibold mb-1">{`Ejercicio ${index + 1}:`}</label>
+              <select
+                name="name"
+                value={exercise.name}
+                onChange={(e) => handleExerciseChange(index, e)}
+                className="px-4 py-2 border border-gray-300 rounded w-full"
+              >
+                {exercisesOptions.map((option, optionIndex) => (
+                  <option key={optionIndex} value={option.name}>{option.name}</option>
+                ))}
+              </select>
+              <div className="flex items-center mt-2">
+                <label className="block w-1/3">Sets:</label>
+                <input
+                  type="number"
+                  name="sets"
+                  value={exercise.sets}
+                  onChange={(e) => handleExerciseChange(index, e)}
+                  className="px-2 py-1 border border-gray-300 rounded w-1/3 mr-2"
+                />
+                <label className="block w-1/3">Repetitions:</label>
+                <input
+                  type="number"
+                  name="repetitions"
+                  value={exercise.repetitions}
+                  onChange={(e) => handleExerciseChange(index, e)}
+                  className="px-2 py-1 border border-gray-300 rounded w-1/3"
+                />
+              </div>
+              {index > 0 && (
+                <button
+                  onClick={() => handleRemoveExercise(index)}
+                  className="text-sm text-red-500 mt-2"
+                >
+                  Eliminar Ejercicio
+                </button>
+              )}
+            </div>
+          ))}
+          <button
+            onClick={handleAddExercise}
+            className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+          >
+            Agregar Ejercicio
+          </button>
         </div>
         <div className="mb-4">
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="mb-4"
-          />
+          <h3 className="text-lg font-semibold">Duración Total del Plan:</h3>
+          <p>{`${totalDuration} minutos`}</p>
         </div>
         <div className="flex justify-end">
           <button
-            onClick={handleUpload}
+            onClick={handleCreatePlan}
             className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-2"
           >
-            Subir
+            Crear Plan
           </button>
           <button
             onClick={onClose}
@@ -119,4 +178,4 @@ const ImageUploadModal = ({ isOpen, onClose }) => {
   );
 };
 
-export default ImageUploadModal;
+export default TrainingPlanModal;

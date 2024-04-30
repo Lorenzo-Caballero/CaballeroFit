@@ -152,7 +152,7 @@ const obtenerRespuestaCohere = async (userMessage) => {
           <div ref={mensajesRef} className="h-60 overflow-y-auto mb-2">
             {mensajes.map((mensaje, index) => (
               <div key={index} className={`mb-2 ${mensaje.origen === 'usuario' ? 'text-right' : 'text-left'} px-4 py-2 rounded-lg bg-purple-200 text-gray-800`}>
-                <strong>{mensaje.origen === 'usuario' ? 'Tú' : 'Asistente LennitaBB'}</strong>: {mensaje.texto}
+                <strong>{mensaje.origen === 'usuario' ? 'Tú' : 'Asistente CaballeroFit'}</strong>: {mensaje.texto}
               </div>
             ))}
             {escribiendo && (
@@ -162,7 +162,7 @@ const obtenerRespuestaCohere = async (userMessage) => {
                 transition={{ duration: 0.5 }}
                 className="mb-2 text-left px-4 py-2 rounded-lg bg-purple-200"
               >
-                <strong>Asistente LennitaBB</strong>: ...
+                <strong>Asistente CaballeroFit</strong>: ...
               </motion.div>
             )}
           </div>

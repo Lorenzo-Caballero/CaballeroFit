@@ -10,13 +10,13 @@ const TheServices = () => {
         <div className="bg-[#F1D8F4] px-8 py-4 lg:py-4">
             <div className="container mx-auto">
                 <h2 className="text-3xl lg:text-4xl text-[#9F5D23] font-semibold pt-8 mb-8">Descubrí nuestros servicios</h2>
-                <p className="text-lg text-[#9F5D23] mb-2">¡Bienvenido a LennitaBB! Acá te explicamos como trabajamos y qué servicios ofrecemos para que disfrutes al máximo de nuestros amigurumis personalizados.</p>
+                <p className="text-lg text-[#9F5D23] mb-2">¡Bienvenido a CaballeroFit! Acá te explicamos como trabajamos y qué servicios ofrecemos para que disfrutes al máximo de nuestros amigurumis personalizados.</p>
 
                 <div className="service-card  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <ServiceCard
                         icon={<IoCardOutline className="text-[#F1D8F4] text-4xl" />}
                         title="Método de pago seguro"
-                        description="En LennitaBB, te ofrecemos un método de pago seguro para todas tus compras. Aceptamos todas las principales tarjetas de crédito y débito, así como MercadoPago y transferencias bancarias."
+                        description="En CaballeroFit, te ofrecemos un método de pago seguro para todas tus compras. Aceptamos todas las principales tarjetas de crédito y débito, así como MercadoPago y transferencias bancarias."
                     />
                     <ServiceCard
                         icon={<HiOutlineTruck className="text-[#F1D8F4] text-4xl" />}
@@ -26,7 +26,7 @@ const TheServices = () => {
                     <ServiceCard
                         icon={<GiStabbedNote className="text-[#F1D8F4] text-4xl" />}
                         title="Amigurumis personalizados"
-                        description="En LennitaBB, nos especializamos en la creación de amigurumis personalizados según tus gustos y preferencias. ¡Cuéntanos tu idea y nosotros la convertiremos en un adorable muñeco de ganchillo!"
+                        description="En CaballeroFit, nos especializamos en la creación de amigurumis personalizados según tus gustos y preferencias. ¡Cuéntanos tu idea y nosotros la convertiremos en un adorable muñeco de ganchillo!"
                     />
                 </div>
             </div>

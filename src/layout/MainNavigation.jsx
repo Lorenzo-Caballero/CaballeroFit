@@ -3,7 +3,7 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { XIcon } from "@heroicons/react/solid";
 import { motion } from "framer-motion";
-import conejita from '../assets/LennitaBBlogo1.png';
+//import conejita from '../assets/CaballeroFitlogo1.png';
 import HambergurMenu from "../assets/HambergurMenu.svg";
 import { BiUser } from "react-icons/bi";
 import { useAuth } from "../components/context/AuthContext";
@@ -69,7 +69,7 @@ const MainNavigation = () => {
             >
               <NavLink to="/">
                 <motion.img
-                  src={conejita}
+                 // src={conejita}
                   alt="Peluche"
                   height="50"
                   width="50"
@@ -86,8 +86,8 @@ const MainNavigation = () => {
             >
               <NavLink to="/">
                 <h1 className="text-3xl font-bold ml-2 select-none">
-                  <span className="text-[#9F5D23]">Lennita</span>
-                  <span className="text-[#f8cefd] ">BB</span>
+                  <span className="text-[#9F5D23]">Caballero</span>
+                  <span className="text-[#f8cefd] ">Fit</span>
                 </h1>
               </NavLink>
             </motion.div>
